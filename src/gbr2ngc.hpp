@@ -173,6 +173,9 @@ extern double gZSafe;
 extern double gZZero;
 extern double gZCut;
 
+extern int gLaserMode;
+extern int gLaserOn;
+extern int gLaserOff;
 extern FILE *gOutStream;
 extern FILE *gInpStream;
 extern FILE *gCfgStream;

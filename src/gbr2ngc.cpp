@@ -56,6 +56,7 @@ struct option gLongOption[] = {
 
   {"zsafe"  , required_argument , 0, 'z'},
   {"zcut"   , required_argument , 0, 'Z'},
+  {"laser-mode" , required_argument , 0, 'L'},
 
   {"gcode-header", required_argument, 0, ARG_GCODE_HEADER},
   {"gcode-footer", required_argument, 0, ARG_GCODE_FOOTER},
@@ -104,6 +105,7 @@ char gOptionDescription[][1024] =
 
   "z safe height (default 0.1 inches)",
   "z cut height (default -0.05 inches)",
+  "laser mode (default disable)",
 
   "prepend custom G-code to the beginning of the program",
   "append custom G-code to the end of the program",
@@ -269,6 +271,10 @@ bool set_option(const char option_char, const char* optarg) {
     case 'l':
       gMinSegmentLength = atof(optarg);
       break;
+      
+    case 'L':
+      gLaserMode= bool_option(optarg,1);
+      break;
 
     case 'I':
       gMetricUnits = bool_option(optarg, 0);
@@ -387,7 +393,7 @@ void process_command_line_options(int argc, char **argv) {
   //
   opterr = 1;
 
-  while ((ch = getopt_long(argc, argv, "i:o:c:r:s:z:Z:f:IMHVGvNhCRF:Pl:D", gLongOption, &option_index)) >= 0) {
+  while ((ch = getopt_long(argc, argv, "i:o:c:r:s:z:Z:L:f:IMHVGvNhCRF:Pl:D", gLongOption, &option_index)) >= 0) {
     switch(ch) {
       case 0:
 
@@ -877,6 +883,10 @@ void dump_options() {
 
   printf("zsafe = %f\n", gZSafe);
   printf("zcut = %f\n", gZCut);
+
+  printf("laserMode = %d\n", gLaserMode);
+  printf("laserOn = M%d\n", gLaserOn);
+  printf("laserOff = M%d\n", gLaserOff);
 
   printf("metric = %d\n", gMetricUnits);
 

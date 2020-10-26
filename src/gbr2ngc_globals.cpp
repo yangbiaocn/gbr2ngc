@@ -46,6 +46,9 @@ double gZSafe = 0.1;
 double gZZero = 0.0;
 double gZCut = -0.05;
 
+int gLaserMode = 0;
+int gLaserOn=3;
+int gLaserOff=5;
 FILE *gOutStream = stdout;
 FILE *gInpStream = stdin;
 FILE *gCfgStream;

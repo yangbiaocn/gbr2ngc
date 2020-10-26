@@ -66,15 +66,40 @@ void cut(FILE* file, const char* axes, double one, double two=0, double three=0)
   int i;
   double coords[] = {one, two, three};
 
+  char vaxes[4]={0x00,0x00,0x00,0x00};
+  for (i = 0; axes[i] != '\0'; i++) {
+        vaxes[i]=axes[i];
+  }
+
+
+  if(gLaserMode)
+  {
+    for (i = 0; axes[i] != '\0'; i++) {
+        if(axes[i]=='z' ||axes[i]=='Z')
+        {
+            if(coords[i]<gZZero)
+                fprintf(file, "M%d S%d", gLaserOn, gFeedRate);
+            else
+                fprintf(file, "M%d", gLaserOff);
+
+            vaxes[i]='\0';
+            fprintf(file, "\n");
+
+            if(i==0)
+                return;
+        }  
+    }      
+  }
+
   if (gHumanReadable) {
     fprintf(file, "g1");
-    for (i = 0; axes[i] != '\0'; i++) {
-      fprintf(file, " %c%." GCODE_LENGTH_PRECISION "f", tolower(axes[i]), coords[i]);
+    for (i = 0; vaxes[i] != '\0'; i++) {
+      fprintf(file, " %c%." GCODE_LENGTH_PRECISION "f", tolower(vaxes[i]), coords[i]);
     }
   } else {
     fprintf(file, "G01");
-    for (i = 0; axes[i] != '\0'; i++) {
-      fprintf(file, "%c%." GCODE_LENGTH_PRECISION "f", toupper(axes[i]), coords[i]);
+    for (i = 0; vaxes[i] != '\0'; i++) {
+      fprintf(file, "%c%." GCODE_LENGTH_PRECISION "f", toupper(vaxes[i]), coords[i]);
     }
   }
 
