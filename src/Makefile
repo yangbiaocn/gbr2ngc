@@ -14,7 +14,8 @@ COPT2=-g -lm -DGERBER_TEST
 #COPT2=-O3 -lm -DGERBER_TEST
 
 CXX=g++
-CXXOPT = -g --std=c++11
+#CXXOPT = -g --std=c++11
+CXXOPT = -g -std=gnu++0x
 #CXXOPT = -O3 --std=c++11
 CXXLIB = -lstdc++ -lboost_thread -lm
 
