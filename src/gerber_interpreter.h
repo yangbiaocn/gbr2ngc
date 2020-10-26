@@ -472,8 +472,8 @@ void add_flash(gerber_state_t *gs, double cur_x, double cur_y, int aperture_name
 void parse_data_block(gerber_state_t *gs, char *linebuf);
 char *parse_d_state(gerber_state_t *gs, char *s);
 void parse_g01(gerber_state_t *gs, char *linebuf_orig) ;
-void parse_g02(gerber_state_t *gs, char *linebuf) ;
-void parse_g03(gerber_state_t *gs, char *linebuf) ;
+void parse_g02(gerber_state_t *gs, char *linebuf_orig) ;
+void parse_g03(gerber_state_t *gs, char *linebuf_orig) ;
 void parse_g04(gerber_state_t *gs, char *linebuf) ;
 void parse_g36(gerber_state_t *gs, char *linebuf) ;
 void parse_g37(gerber_state_t *gs, char *linebuf) ;

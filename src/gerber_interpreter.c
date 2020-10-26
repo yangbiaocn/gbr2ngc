@@ -2044,7 +2044,7 @@ char *parse_single_coord(gerber_state_t *gs, double *val, int fs_int, int fs_rea
 
 char *parse_single_int(gerber_state_t *gs, int *val, char *s) {
   int i, j, k;
-  char *chp, ch, *tbuf;;
+  char *chp, ch, *tbuf;
   double d;
 
   //if (*s != tok) parse_error("expected token", line_no, NULL);
@@ -2588,8 +2588,25 @@ void parse_g01(gerber_state_t *gs, char *linebuf_orig) {
 
 // clockwise circular interpolation
 //
-void parse_g02(gerber_state_t *gs, char *linebuf) {
+void parse_g02(gerber_state_t *gs, char *linebuf_orig) {
+   char *linebuf;
+  char *chp;
+  unsigned int state = 0;
+
+  double prev_x, prev_y;
   gerber_item_ll_t *item_nod;
+
+  prev_x = gs->cur_x;
+  prev_y = gs->cur_y;
+
+  linebuf = strdup(linebuf_orig);
+
+  chp = linebuf + 1;
+  gs->g_state = 1;
+
+  if (chp[0] == '2') { chp++; }
+  else if ((chp[0] == '0') && (chp[1] == '2')) { chp+=2; }
+  else { parse_error("invalid g02 code", gs->line_no, linebuf); }
 
   gs->interpolation_mode = INTERPOLATION_MODE_CW;
 
@@ -2607,6 +2624,15 @@ void parse_g02(gerber_state_t *gs, char *linebuf) {
     item_nod = gerber_item_create(GERBER_G02, gs);
     gerber_state_add_item(gs, item_nod);
   }
+  if (*chp == '*') {
+    free(linebuf);
+    return;
+  }
+
+  parse_data_block(gs, chp);
+
+  free(linebuf);
+  return;
 
 }
 
@@ -2614,8 +2640,25 @@ void parse_g02(gerber_state_t *gs, char *linebuf) {
 
 // counter-clockwise circular interpolation
 //
-void parse_g03(gerber_state_t *gs, char *linebuf) {
+void parse_g03(gerber_state_t *gs, char *linebuf_orig) {
+   char *linebuf;
+  char *chp;
+  unsigned int state = 0;
+
+  double prev_x, prev_y;
   gerber_item_ll_t *item_nod;
+
+  prev_x = gs->cur_x;
+  prev_y = gs->cur_y;
+
+  linebuf = strdup(linebuf_orig);
+
+  chp = linebuf + 1;
+  gs->g_state = 1;
+
+  if (chp[0] == '3') { chp++; }
+  else if ((chp[0] == '0') && (chp[1] == '3')) { chp+=2; }
+  else { parse_error("invalid g02 code", gs->line_no, linebuf); }
 
   gs->interpolation_mode = INTERPOLATION_MODE_CCW;
 
@@ -2633,7 +2676,15 @@ void parse_g03(gerber_state_t *gs, char *linebuf) {
     item_nod = gerber_item_create(GERBER_G03, gs);
     gerber_state_add_item(gs, item_nod);
   }
+  if (*chp == '*') {
+    free(linebuf);
+    return;
+  }
 
+  parse_data_block(gs, chp);
+
+  free(linebuf);
+  return;
 }
 
 //------------------------
